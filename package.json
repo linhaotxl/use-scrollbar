@@ -1,11 +1,11 @@
 {
-  "name": "@linh-txl/pro-crud",
-  "version": "0.0.29",
+  "name": "@linh-txl/use-scrollbar",
+  "version": "0.0.0",
   "type": "module",
   "files": [
     "dist/*"
   ],
-  "main": "./dist/pro-components.es.js",
+  "main": "./dist/use-scrollbar.es.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -24,10 +24,10 @@
   "author": "linh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/linhaotxl/pro-crud"
+    "url": "https://github.com/linhaotxl/use-scrollbar"
   },
   "license": "ISC",
-  "homepage": "https://github.com/linhaotxl/pro-crud",
+  "homepage": "https://github.com/linhaotxl/use-scrollbar",
   "dependencies": {
     "big.js": "^6.2.1",
     "vue": "^3.3.8"
