@@ -121,9 +121,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve('core/index.ts'),
-      name: 'ProComponents',
+      name: 'UseScrollbar',
       formats: ['es'],
-      fileName: format => `pro-components.${format}.js`,
+      fileName: format => `use-scrollbar.${format}.js`,
     },
     rollupOptions: {
       external: ['vue', 'ant-design-vue'],
