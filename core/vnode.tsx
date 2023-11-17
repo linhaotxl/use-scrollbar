@@ -3,7 +3,8 @@ import { getScrollbarType, scrollbarMap } from './constants'
 import type { CSSProperties, Ref } from 'vue'
 
 export function createBarVNode(
-  ref: Ref,
+  barRef: Ref<HTMLElement | null>,
+  thumbRef: Ref<HTMLElement | null>,
   style: CSSProperties,
   vertical: boolean
 ) {
@@ -13,8 +14,8 @@ export function createBarVNode(
   const thumbClass = `scroll__thumb-${sign}`
 
   return (
-    <div class={barClass}>
-      <div ref={ref} class={thumbClass} style={style}></div>
+    <div ref={barRef} class={barClass}>
+      <div ref={thumbRef} class={thumbClass} style={style}></div>
     </div>
   )
 }

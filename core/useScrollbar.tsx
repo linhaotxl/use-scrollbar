@@ -14,10 +14,8 @@ export function useScrollbar(
 ) {
   const wrapRef = ref<HTMLElement | null>(null)
   const mountRef = computed(() => unrefElement(mount))
-  const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef } = useThumb(
-    wrapRef,
-    options
-  )
+  const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef, barXRef, barYRef } =
+    useThumb(wrapRef, options)
 
   const ScrollbarTrack = defineComponent({
     name: 'ScrollbarTrack',
@@ -26,9 +24,9 @@ export function useScrollbar(
       return () => {
         return (
           <>
-            {createBarVNode(thumbXRef, thumbXStyle.value, false)}
+            {createBarVNode(barXRef, thumbXRef, thumbXStyle.value, false)}
 
-            {createBarVNode(thumbYRef, thumbYStyle.value, true)}
+            {createBarVNode(barYRef, thumbYRef, thumbYStyle.value, true)}
           </>
         )
       }

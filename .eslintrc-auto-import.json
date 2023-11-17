@@ -88,6 +88,7 @@
     "refWithControl": true,
     "resolveComponent": true,
     "resolveDirective": true,
+    "resolveOffset": true,
     "resolveRef": true,
     "resolveUnref": true,
     "scrollClass": true,

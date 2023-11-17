@@ -23,25 +23,38 @@
     }
   }
 
+  &__bar-x,
   &__bar-y {
     position: absolute;
+    box-sizing: border-box;
+  }
+
+  &__bar-y {
     top: var(--scroll-thumb-offset);
     right: var(--scroll-thumb-offset);
     bottom: var(--scroll-thumb-offset);
     width: var(--scroll-thumb-size);
+    height: calc(100% - var(--scroll-thumb-offset) - var(--scroll-thumb-offset));
+
+    // border: 1px solid #ff0000;
   }
 
   &__bar-x {
-    position: absolute;
     right: var(--scroll-thumb-offset);
     bottom: var(--scroll-thumb-offset);
     left: var(--scroll-thumb-offset);
+    width: calc(100% - var(--scroll-thumb-offset) - var(--scroll-thumb-offset));
     height: var(--scroll-thumb-size);
+
+    // border: 1px solid #99ff99;
   }
 
   &__thumb-x,
   &__thumb-y {
     border-radius: 4px;
+
+    // background-color: blue;
+
     background-color: #00000000;
     transition: background-color var(--scroll-thumb-fade-time);
     cursor: pointer;

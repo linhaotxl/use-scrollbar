@@ -4,6 +4,7 @@ import {
   useMutationObserver,
   useResizeObserver,
 } from '@vueuse/core'
+import Big from 'big.js'
 import { computed, ref } from 'vue'
 
 import { resolveOffset, type OffsetNumberOrElement } from './constants'
@@ -18,13 +19,12 @@ export interface UseScrollbarOptions {
   offsetLeft?: OffsetNumberOrElement
 }
 
-const ThumbOffset = 0
-
 /**
  * 垂直滑块
  */
 function useVerticalThumb(
   wrapRef: MaybeComputedElementRef<ElementOrNil>,
+  barYRef: MaybeComputedElementRef<ElementOrNil>,
   offsetTop: OffsetNumberOrElement
 ) {
   const height = ref(0)
@@ -36,10 +36,17 @@ function useVerticalThumb(
    */
   function executeHeight() {
     const wrapEl = unrefElement(wrapRef)
-    const { scrollHeight: wrapHeight = 1, offsetHeight: viewHeight = 0 } =
+    const barYEl = unrefElement(barYRef)
+    const { scrollHeight: wrapHeight = 1, offsetHeight: wrapViewHeight } =
       wrapEl || {}
+    const { clientHeight: viewHeight = 0 } = barYEl || {}
+
     height.value =
-      viewHeight === wrapHeight ? 0 : (viewHeight * viewHeight) / wrapHeight
+      wrapViewHeight === wrapHeight
+        ? 0
+        : Math.round(
+            new Big(viewHeight).times(viewHeight).div(wrapHeight).toNumber()
+          )
   }
 
   /**
@@ -48,18 +55,20 @@ function useVerticalThumb(
    */
   function executeTop() {
     const wrapEl = unrefElement(wrapRef)
-    const {
-      scrollTop: viewOffset = 0,
-      offsetHeight = 0,
-      scrollHeight: wrapHeight = 1,
-    } = wrapEl || {}
+    const barYEl = unrefElement(barYRef)
+    const { scrollTop: viewOffset = 0, scrollHeight: wrapHeight = 1 } =
+      wrapEl || {}
+    const { clientHeight: offsetHeight = 0 } = barYEl || {}
 
-    // max: wrapHeight - height.value
-    top.value = Math.max(
-      0,
-      (viewOffset * offsetHeight) / wrapHeight +
-        resolveOffset(offsetTop, true) -
-        ThumbOffset
+    top.value = Math.min(
+      offsetHeight - height.value,
+      Math.round(
+        new Big(viewOffset)
+          .times(offsetHeight)
+          .div(wrapHeight)
+          .plus(resolveOffset(offsetTop, true))
+          .toNumber()
+      )
     )
   }
 
@@ -71,6 +80,7 @@ function useVerticalThumb(
  */
 function useHorizontalThumb(
   wrapRef: MaybeComputedElementRef<ElementOrNil>,
+  barXRef: MaybeComputedElementRef<ElementOrNil>,
   offsetLeft: OffsetNumberOrElement
 ) {
   const width = ref(0)
@@ -81,11 +91,17 @@ function useHorizontalThumb(
    */
   function executeWidth() {
     const wrapEl = unrefElement(wrapRef)
-    const { scrollWidth: wrapWidth = 1, offsetWidth: viewWidth = 0 } =
+    const barXEl = unrefElement(barXRef)
+    const { scrollWidth: wrapWidth = 1, offsetWidth: wrapViewWidth = 0 } =
       wrapEl || {}
+    const { clientWidth: viewWidth = 0 } = barXEl || {}
 
     width.value =
-      viewWidth === wrapWidth ? 0 : (viewWidth * viewWidth) / wrapWidth
+      wrapViewWidth === wrapWidth
+        ? 0
+        : Math.round(
+            new Big(viewWidth).times(viewWidth).div(wrapWidth).toNumber()
+          )
   }
 
   /**
@@ -93,14 +109,21 @@ function useHorizontalThumb(
    */
   function executeLeft() {
     const wrapEl = unrefElement(wrapRef)
-    const {
-      scrollLeft: viewOffset = 0,
-      offsetWidth = 0,
-      scrollWidth: wrapWidth = 1,
-    } = wrapEl || {}
+    const barXEl = unrefElement(barXRef)
+    const { scrollLeft: viewOffset = 0, scrollWidth: wrapWidth = 1 } =
+      wrapEl || {}
+    const { clientWidth: offsetWidth = 0 } = barXEl || {}
 
-    left.value =
-      (viewOffset * offsetWidth) / wrapWidth + resolveOffset(offsetLeft, false)
+    left.value = Math.min(
+      offsetWidth - width.value,
+      Math.round(
+        new Big(viewOffset)
+          .times(offsetWidth)
+          .div(wrapWidth)
+          .plus(resolveOffset(offsetLeft, true))
+          .toNumber()
+      )
+    )
   }
 
   return { width, left, executeWidth, executeLeft }
@@ -112,22 +135,25 @@ export function useThumb(
 ) {
   const { offsetTop, offsetLeft } = options
 
-  const thumbYRef = ref<HTMLDivElement | null>(null)
-  const thumbXRef = ref<HTMLDivElement | null>(null)
+  const thumbYRef = ref<HTMLElement | null>(null)
+  const thumbXRef = ref<HTMLElement | null>(null)
+
+  const barYRef = ref<HTMLElement | null>(null)
+  const barXRef = ref<HTMLElement | null>(null)
 
   const {
     height: thumbYHeight,
     top: thumbYTop,
     executeTop: executeThumbYTop,
     executeHeight: executeThumbYHeight,
-  } = useVerticalThumb(wrap, offsetTop)
+  } = useVerticalThumb(wrap, barYRef, offsetTop)
 
   const {
     width: thumbXWidth,
     left: thumbXLeft,
     executeLeft: executeThumbXLeft,
     executeWidth: executeThumbXWidth,
-  } = useHorizontalThumb(wrap, offsetLeft)
+  } = useHorizontalThumb(wrap, barXRef, offsetLeft)
 
   // 记录滑块被点击时的位置
   const down = { x: 0, y: 0 }
@@ -192,7 +218,6 @@ export function useThumb(
   }
 
   function resize() {
-    // debugger
     executeThumbYHeight()
     executeThumbXWidth()
     executeThumbYTop()
@@ -218,6 +243,8 @@ export function useThumb(
   return {
     thumbYStyle,
     thumbXStyle,
+    barXRef,
+    barYRef,
     thumbXRef,
     thumbYRef,
   }

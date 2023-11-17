@@ -10,7 +10,8 @@ export const ScrollBar = defineComponent({
   setup(_, { slots }) {
     const wrapRef = ref<HTMLDivElement | null>(null)
 
-    const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef } = useThumb(wrapRef)
+    const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef, barYRef, barXRef } =
+      useThumb(wrapRef)
 
     return () => {
       return (
@@ -19,9 +20,9 @@ export const ScrollBar = defineComponent({
             {slots.default?.()}
           </div>
 
-          {createBarVNode(thumbXRef, thumbXStyle.value, false)}
+          {createBarVNode(barXRef, thumbXRef, thumbXStyle.value, false)}
 
-          {createBarVNode(thumbYRef, thumbYStyle.value, true)}
+          {createBarVNode(barYRef, thumbYRef, thumbYStyle.value, true)}
         </div>
       )
     }
