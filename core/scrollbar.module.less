@@ -4,13 +4,6 @@
   --scroll-thumb-offset: 2px;
 
   position: relative;
-
-  &:hover {
-    .thumbX,
-    .thumbY {
-      background-color: rgb(0 0 0 / 20%);
-    }
-  }
 }
 
 .wrap {
@@ -50,6 +43,14 @@
   background-color: #00000000;
   transition: background-color var(--scroll-thumb-fade-time);
   cursor: pointer;
+}
+
+.visible {
+  background-color: rgb(0 0 0 / 20%);
+}
+
+.hidden {
+  background-color: #00000000;
 }
 
 .thumbY {

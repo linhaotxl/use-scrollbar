@@ -7,7 +7,8 @@ export function createBarVNode(
   barRef: Ref<HTMLElement | null>,
   thumbRef: Ref<HTMLElement | null>,
   style: CSSProperties,
-  vertical: boolean
+  vertical: boolean,
+  visible: Ref<string>
 ) {
   const sign = scrollbarMap[getScrollbarType(vertical)].sign.toUpperCase()
 
@@ -15,7 +16,7 @@ export function createBarVNode(
     <div ref={barRef} class={[styleModule.bar, styleModule[`bar${sign}`]]}>
       <div
         ref={thumbRef}
-        class={[styleModule.thumb, styleModule[`thumb${sign}`]]}
+        class={[styleModule.thumb, styleModule[`thumb${sign}`], visible?.value]}
         style={style}
       ></div>
     </div>

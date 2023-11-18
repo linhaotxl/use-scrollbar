@@ -14,8 +14,17 @@ export function useScrollbar(
 ) {
   const wrapRef = ref<HTMLElement | null>(null)
   const mountRef = computed(() => unrefElement(mount))
-  const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef, barXRef, barYRef } =
-    useThumb(wrapRef, options)
+  const {
+    thumbYStyle,
+    thumbXStyle,
+    thumbXRef,
+    thumbYRef,
+    barXRef,
+    barYRef,
+    barXVisible,
+    barYVisible,
+    toggleBarVisible,
+  } = useThumb(wrapRef, options)
 
   const ScrollbarTrack = defineComponent({
     name: 'ScrollbarTrack',
@@ -24,8 +33,20 @@ export function useScrollbar(
       return () => {
         return (
           <>
-            {createBarVNode(barXRef, thumbXRef, thumbXStyle.value, false)}
-            {createBarVNode(barYRef, thumbYRef, thumbYStyle.value, true)}
+            {createBarVNode(
+              barXRef,
+              thumbXRef,
+              thumbXStyle.value,
+              false,
+              barXVisible
+            )}
+            {createBarVNode(
+              barYRef,
+              thumbYRef,
+              thumbYStyle.value,
+              true,
+              barYVisible
+            )}
           </>
         )
       }
@@ -38,6 +59,8 @@ export function useScrollbar(
       if (el && el.parentElement) {
         el.classList.add(styleModules.wrap)
         el.parentElement.classList.add(styleModules.scrollbar)
+        useEventListener(el.parentElement, 'mouseenter', toggleBarVisible)
+        useEventListener(el.parentElement, 'mouseleave', toggleBarVisible)
         wrapRef.value = el as HTMLElement
 
         render(h(ScrollbarTrack), el.parentElement)

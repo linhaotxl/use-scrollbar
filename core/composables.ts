@@ -3,11 +3,13 @@ import {
   useEventListener,
   useMutationObserver,
   useResizeObserver,
+  useToggle,
 } from '@vueuse/core'
 import Big from 'big.js'
 import { computed, ref } from 'vue'
 
 import { resolveOffset, type OffsetNumberOrElement } from './constants'
+import styleModules from './scrollbar.module.less'
 
 import type { MaybeComputedElementRef } from '@vueuse/core'
 import type { CSSProperties } from 'vue'
@@ -251,6 +253,26 @@ export function useThumb(
     transform: `translateX(${thumbXLeft.value}px)`,
   }))
 
+  const [barYVisible, toggleBarY] = useToggle<string, string>(
+    styleModules.hidden,
+    {
+      truthyValue: styleModules.visible,
+      falsyValue: styleModules.hidden,
+    }
+  )
+  const [barXVisible, toggleBarX] = useToggle<string, string>(
+    styleModules.hidden,
+    {
+      truthyValue: styleModules.visible,
+      falsyValue: styleModules.hidden,
+    }
+  )
+
+  function toggleBarVisible() {
+    toggleBarY()
+    toggleBarX()
+  }
+
   return {
     thumbYStyle,
     thumbXStyle,
@@ -258,5 +280,8 @@ export function useThumb(
     barYRef,
     thumbXRef,
     thumbYRef,
+    barYVisible,
+    barXVisible,
+    toggleBarVisible,
   }
 }

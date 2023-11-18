@@ -9,19 +9,44 @@ export const ScrollBar = defineComponent({
 
   setup(_, { slots }) {
     const wrapRef = ref<HTMLDivElement | null>(null)
-    const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef, barYRef, barXRef } =
-      useThumb(wrapRef)
+    const {
+      thumbYStyle,
+      thumbXStyle,
+      thumbXRef,
+      thumbYRef,
+      barYRef,
+      barXRef,
+      barXVisible,
+      barYVisible,
+      toggleBarVisible,
+    } = useThumb(wrapRef)
+
+    const mountRef = ref<HTMLDivElement | null>(null)
+    useEventListener(mountRef, 'mouseenter', toggleBarVisible)
+    useEventListener(mountRef, 'mouseleave', toggleBarVisible)
 
     return () => {
       return (
-        <div class={styleModules.scrollbar}>
+        <div ref={mountRef} class={styleModules.scrollbar}>
           <div ref={wrapRef} class={styleModules.wrap}>
             {slots.default?.()}
           </div>
 
-          {createBarVNode(barXRef, thumbXRef, thumbXStyle.value, false)}
+          {createBarVNode(
+            barXRef,
+            thumbXRef,
+            thumbXStyle.value,
+            false,
+            barXVisible
+          )}
 
-          {createBarVNode(barYRef, thumbYRef, thumbYStyle.value, true)}
+          {createBarVNode(
+            barYRef,
+            thumbYRef,
+            thumbYStyle.value,
+            true,
+            barYVisible
+          )}
         </div>
       )
     }
