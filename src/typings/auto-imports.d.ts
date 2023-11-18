@@ -92,8 +92,6 @@ declare global {
   const resolveOffset: typeof import('../../core/constants')['resolveOffset']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
-  const scrollClass: typeof import('../../core/constants')['scrollClass']
-  const scrollWrapClass: typeof import('../../core/constants')['scrollWrapClass']
   const scrollbarMap: typeof import('../../core/constants')['scrollbarMap']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
@@ -391,8 +389,6 @@ declare module 'vue' {
     readonly resolveOffset: UnwrapRef<typeof import('../../core/constants')['resolveOffset']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
-    readonly scrollClass: UnwrapRef<typeof import('../../core/constants')['scrollClass']>
-    readonly scrollWrapClass: UnwrapRef<typeof import('../../core/constants')['scrollWrapClass']>
     readonly scrollbarMap: UnwrapRef<typeof import('../../core/constants')['scrollbarMap']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>

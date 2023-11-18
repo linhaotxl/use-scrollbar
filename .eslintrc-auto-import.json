@@ -91,8 +91,6 @@
     "resolveOffset": true,
     "resolveRef": true,
     "resolveUnref": true,
-    "scrollClass": true,
-    "scrollWrapClass": true,
     "scrollbarMap": true,
     "shallowReactive": true,
     "shallowReadonly": true,

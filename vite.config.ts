@@ -11,6 +11,7 @@ import Components from 'unplugin-vue-components/vite'
 import { transformLazyShow } from 'v-lazy-show'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import libCss from 'vite-plugin-libcss'
 import { viteMockServe } from 'vite-plugin-mock'
 import Pages from 'vite-plugin-pages'
 import svgLoader from 'vite-svg-loader'
@@ -105,6 +106,8 @@ export default defineConfig({
         ),
       },
     }),
+
+    libCss(),
   ],
 
   resolve: {
@@ -119,6 +122,7 @@ export default defineConfig({
   },
 
   build: {
+    cssCodeSplit: true,
     lib: {
       entry: resolve('core/index.ts'),
       name: 'UseScrollbar',

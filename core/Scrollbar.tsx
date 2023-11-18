@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue'
 
 import { useThumb } from './composables'
-import { scrollClass, scrollWrapClass } from './constants'
+import styleModules from './scrollbar.module.less'
 import { createBarVNode } from './vnode'
 
 export const ScrollBar = defineComponent({
@@ -9,14 +9,13 @@ export const ScrollBar = defineComponent({
 
   setup(_, { slots }) {
     const wrapRef = ref<HTMLDivElement | null>(null)
-
     const { thumbYStyle, thumbXStyle, thumbXRef, thumbYRef, barYRef, barXRef } =
       useThumb(wrapRef)
 
     return () => {
       return (
-        <div class={scrollClass}>
-          <div ref={wrapRef} class={scrollWrapClass}>
+        <div class={styleModules.scrollbar}>
+          <div ref={wrapRef} class={styleModules.wrap}>
             {slots.default?.()}
           </div>
 

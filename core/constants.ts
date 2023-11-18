@@ -15,9 +15,6 @@ export type OffsetNumberOrElement = MaybeRef<number | MaybeElement>
 export const getScrollbarType = (vertical: boolean): ScrollType =>
   vertical ? 'vertical' : 'horizontal'
 
-export const scrollClass = 'scroll'
-export const scrollWrapClass = 'scroll__wrap'
-
 export const scrollbarMap: Record<ScrollType, ScrollbarMap> = {
   horizontal: {
     sign: 'x',

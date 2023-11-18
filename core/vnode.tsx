@@ -1,4 +1,5 @@
 import { getScrollbarType, scrollbarMap } from './constants'
+import styleModule from './scrollbar.module.less'
 
 import type { CSSProperties, Ref } from 'vue'
 
@@ -8,14 +9,15 @@ export function createBarVNode(
   style: CSSProperties,
   vertical: boolean
 ) {
-  const sign = scrollbarMap[getScrollbarType(vertical)].sign
-
-  const barClass = `scroll__bar-${sign}`
-  const thumbClass = `scroll__thumb-${sign}`
+  const sign = scrollbarMap[getScrollbarType(vertical)].sign.toUpperCase()
 
   return (
-    <div ref={barRef} class={barClass}>
-      <div ref={thumbRef} class={thumbClass} style={style}></div>
+    <div ref={barRef} class={[styleModule.bar, styleModule[`bar${sign}`]]}>
+      <div
+        ref={thumbRef}
+        class={[styleModule.thumb, styleModule[`thumb${sign}`]]}
+        style={style}
+      ></div>
     </div>
   )
 }

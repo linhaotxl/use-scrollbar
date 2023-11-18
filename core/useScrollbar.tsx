@@ -2,7 +2,7 @@ import { unrefElement } from '@vueuse/core'
 import { computed, defineComponent, h, ref, render, watch } from 'vue'
 
 import { useThumb } from './composables'
-import { scrollClass, scrollWrapClass } from './constants'
+import styleModules from './scrollbar.module.less'
 import { createBarVNode } from './vnode'
 
 import type { UseScrollbarOptions } from './composables'
@@ -37,8 +37,8 @@ export function useScrollbar(
     mountRef,
     el => {
       if (el && el.parentElement) {
-        el.classList.add(scrollWrapClass)
-        el.parentElement.classList.add(scrollClass)
+        el.classList.add(styleModules.wrap)
+        el.parentElement.classList.add(styleModules.scrollbar)
         wrapRef.value = el as HTMLElement
 
         render(h(ScrollbarTrack), el.parentElement)
