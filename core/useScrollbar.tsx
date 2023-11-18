@@ -25,7 +25,6 @@ export function useScrollbar(
         return (
           <>
             {createBarVNode(barXRef, thumbXRef, thumbXStyle.value, false)}
-
             {createBarVNode(barYRef, thumbYRef, thumbYStyle.value, true)}
           </>
         )

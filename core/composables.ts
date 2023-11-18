@@ -37,15 +37,24 @@ function useVerticalThumb(
   function executeHeight() {
     const wrapEl = unrefElement(wrapRef)
     const barYEl = unrefElement(barYRef)
-    const { scrollHeight: wrapHeight = 1, offsetHeight: wrapViewHeight } =
+    // wrapScrollHeight: 容器可滚动高度
+    // wrapViewHeight: 容器可视高度
+    // barHeight: 滚动区域真实高度，不包括边框
+    // wrapScrollTop: 容器已滚动距离
+    // barHeightWithoutTop: 减去顶部偏移的滚动条真实高度
+    const { scrollHeight: wrapScrollHeight = 1, offsetHeight: wrapViewHeight } =
       wrapEl || {}
-    const { clientHeight: viewHeight = 0 } = barYEl || {}
+    const { clientHeight: barHeight = 0 } = barYEl || {}
+    const barHeightWithoutTop = barHeight - resolveOffset(offsetTop, true)
 
     height.value =
-      wrapViewHeight === wrapHeight
+      wrapViewHeight === wrapScrollHeight
         ? 0
         : Math.round(
-            new Big(viewHeight).times(viewHeight).div(wrapHeight).toNumber()
+            new Big(barHeightWithoutTop)
+              .times(barHeightWithoutTop)
+              .div(wrapScrollHeight)
+              .toNumber()
           )
   }
 
@@ -54,21 +63,20 @@ function useVerticalThumb(
    * 可视区域滑动距离 / 滚动区域高度 = 滑块滑动距离 / 滚动条高度(可视区域高度)
    */
   function executeTop() {
+    const offsetTopNumber = resolveOffset(offsetTop, true)
     const wrapEl = unrefElement(wrapRef)
     const barYEl = unrefElement(barYRef)
-    const { scrollTop: viewOffset = 0, scrollHeight: wrapHeight = 1 } =
+    const { scrollTop: wrapScrollTop = 0, scrollHeight: wrapScrollHeight = 1 } =
       wrapEl || {}
-    const { clientHeight: offsetHeight = 0 } = barYEl || {}
+    const { clientHeight: barHeight = 0 } = barYEl || {}
+    const barHeightWithoutTop = barHeight - offsetTopNumber
 
-    top.value = Math.min(
-      offsetHeight - height.value,
-      Math.round(
-        new Big(viewOffset)
-          .times(offsetHeight)
-          .div(wrapHeight)
-          .plus(resolveOffset(offsetTop, true))
-          .toNumber()
-      )
+    top.value = Math.round(
+      new Big(wrapScrollTop)
+        .times(barHeightWithoutTop)
+        .div(wrapScrollHeight)
+        .plus(offsetTopNumber)
+        .toNumber()
     )
   }
 
@@ -92,15 +100,19 @@ function useHorizontalThumb(
   function executeWidth() {
     const wrapEl = unrefElement(wrapRef)
     const barXEl = unrefElement(barXRef)
-    const { scrollWidth: wrapWidth = 1, offsetWidth: wrapViewWidth = 0 } =
+    const { scrollWidth: wrapScrollWidth = 1, offsetWidth: wrapViewWidth = 0 } =
       wrapEl || {}
-    const { clientWidth: viewWidth = 0 } = barXEl || {}
+    const { clientWidth: barWidth = 0 } = barXEl || {}
+    const barWidthtWithoutLeft = barWidth - resolveOffset(offsetLeft, false)
 
     width.value =
-      wrapViewWidth === wrapWidth
+      wrapViewWidth === wrapScrollWidth
         ? 0
         : Math.round(
-            new Big(viewWidth).times(viewWidth).div(wrapWidth).toNumber()
+            new Big(barWidthtWithoutLeft)
+              .times(barWidthtWithoutLeft)
+              .div(wrapScrollWidth)
+              .toNumber()
           )
   }
 
@@ -108,21 +120,20 @@ function useHorizontalThumb(
    * 计算滑块偏移
    */
   function executeLeft() {
+    const offsetLeftNumber = resolveOffset(offsetLeft, false)
     const wrapEl = unrefElement(wrapRef)
     const barXEl = unrefElement(barXRef)
-    const { scrollLeft: viewOffset = 0, scrollWidth: wrapWidth = 1 } =
+    const { scrollLeft: wrapScrollLeft = 0, scrollWidth: wrapScrollWidth = 1 } =
       wrapEl || {}
-    const { clientWidth: offsetWidth = 0 } = barXEl || {}
+    const { clientWidth: barWidth = 0 } = barXEl || {}
+    const barWidthtWithoutLeft = barWidth - offsetLeftNumber
 
-    left.value = Math.min(
-      offsetWidth - width.value,
-      Math.round(
-        new Big(viewOffset)
-          .times(offsetWidth)
-          .div(wrapWidth)
-          .plus(resolveOffset(offsetLeft, true))
-          .toNumber()
-      )
+    left.value = Math.round(
+      new Big(wrapScrollLeft)
+        .times(barWidthtWithoutLeft)
+        .div(wrapScrollWidth)
+        .plus(offsetLeftNumber)
+        .toNumber()
     )
   }
 
